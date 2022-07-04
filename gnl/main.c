@@ -6,7 +6,7 @@
 /*   By: emetras- <emetras-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 14:55:22 by emetras-          #+#    #+#             */
-/*   Updated: 2022/06/30 15:47:54 by emetras-         ###   ########.fr       */
+/*   Updated: 2022/07/03 05:21:17 by emetras-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,19 @@
     int     fd;
     char    *buf;
 
-    fd = open("41_with_nl", O_RDONLY);
+    fd = open("42_with_nl", O_RDONLY);
 	buf = get_next_line(fd);  
 	 printf("%s", buf);
 	    free(buf);
-    close(fd);
-
-	fd = open("42_with_nl", O_RDONLY);
+	buf = get_next_line(fd);  
+	 printf("%s", buf);
+	    free(buf);
+	buf = get_next_line(fd);  
+	 printf("%s", buf);
+	    free(buf);
+	buf = get_next_line(fd);  
+	 printf("%s", buf);
+	    free(buf);
 	buf = get_next_line(fd);  
 	 printf("%s", buf);
 	    free(buf);
