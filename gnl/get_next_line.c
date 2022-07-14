@@ -6,71 +6,70 @@
 /*   By: emetras- <emetras-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 14:24:08 by emetras-          #+#    #+#             */
-/*   Updated: 2022/07/04 06:32:01 by emetras-         ###   ########.fr       */
+/*   Updated: 2022/07/14 16:35:13 by emetras-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+#include <stdio.h>
 
-static char	*ft_next(int fd, char *buffer, int read_c);
-int		ft_putend(char *buffer);
-// static int	str_len_nl(char *s, char crt);
+static char	*ft_next(int fd, char **s_buffer, char *buffer);
+int			ft_strend(char *buffer);
 
 char	*get_next_line(int fd)
 {
-	int				r_read;
 	char		*buff;
+	static char	*s_buff;
 
-	if(fd >= 1024 || fd < 0 || BUFFER_SIZE < 0 )//se for negativo deu falha no open, minha definição que fd vai de 0 até 1024
-		return (NULL);//com ulimit -aH posso verificar o tamanho (fd), e modificando um arquivo especial mudo o tamanho
-	buff = (char *) ft_calloc((BUFFER_SIZE + 1), sizeof(char));//alloca memoria para string com \0
+	if(fd > 1023 || fd < 0 || BUFFER_SIZE <= 0 )
+		return (NULL);
+	buff = (char *) malloc((BUFFER_SIZE + 1) * sizeof(char));
 	if (!buff)
 		return (NULL);
-	if (!(r_read = read(fd, buff, BUFFER_SIZE))) //atenção, se for 0 retorna 0. pensar no return -1 read
-	{
-		free (buff);
-		return (NULL);
-	}
-	buff[r_read] = '\0';
-	buff = ft_next(fd, buff, r_read);
+	buff = ft_next(fd, &s_buff, buff);
 	return (buff);
 }
 
-static char	*ft_next(int fd, char *buffer, int read_c)
+static char	*ft_next(int fd, char **s_buffer, char *buffer)
 {
-	char	flag; //flag para achar o '\n' de new line
-	char	*phrase;
-	int		size;
-	char	*temp;
+	int	sz_read;
+	int	i;
 
-	flag = 0;
-	if (!read_c)
-		return (buffer);
-	phrase = ft_strjoin("\0", buffer); 
-	// read_c = read(fd, buffer, BUFFER_SIZE);
-	while (read_c && !flag)
+	i = 0;
+	sz_read = 0;
+	if (!*s_buffer)
 	{
-		if((ft_strrchr(phrase, '\n'))) //procura se tem o \n, se tiver entra no if
+		sz_read = read(fd, buffer, BUFFER_SIZE);
+		if (sz_read < 0)
+			return (NULL);
+		buffer[sz_read] = '\0';
+		if (ft_strchr((buffer), '\n'))
 		{
-			flag = 1;
-			size = ft_putend(phrase);
-			phrase[size +1] = '\0';
-		}
-		// phrase[read_c +1] = '\0';  //colocar +1
-		if (!flag)
-		{
-			temp = phrase;  //amarzeno o ponteiro para não perder a referência
-			read_c = read(fd, buffer, BUFFER_SIZE);
-			phrase = ft_strjoin(phrase, buffer);//passei para depois do if
-			free(temp); //limpo o ponteiro para não dá vazamento
+			i = ft_strend(buffer);
+			*s_buffer = ft_substr(buffer, i + 1, BUFFER_SIZE);
+			return (ft_substr(buffer, 0, i + 1));
 		}
 	}
-	// phrase = ft_strjoin(phrase, buffer);
-	free(buffer);
-	return (phrase);
+	if(*s_buffer) //se a estatica contem conteudo
+	{
+		if (ft_strchr(*s_buffer, '\n'))
+		{
+			i = ft_strend(*s_buffer);
+			buffer = ft_substr(*s_buffer, 0, i + 1);
+			*s_buffer = ft_substr(*s_buffer, i + 1, BUFFER_SIZE);
+		}
+		else
+		{
+			i = ft_strend(*s_buffer);
+			buffer = ft_substr(*s_buffer, 0, i + 1);
+		}
+	}
+	if (!buffer)
+		return (NULL);
+	return (buffer);
 }
 
-int ft_putend(char *buffer)
+int ft_strend(char *buffer)
 {
 	int i;
 
@@ -79,12 +78,19 @@ int ft_putend(char *buffer)
 		i++;
 	return (i);
 }
-// static int str_len_nl(char *s, char crt)
-// {
-// 	int	i;
 
-// 	i = 0;
-// 	while(*s != '\0' && *s != crt)
-// 		i++;
-// 	return (i);
-// }
+char	*ft_strchr(const char *s, int c)
+{
+	int	index;
+
+	index = 0;
+	while (s[index])
+	{
+		if (s[index] == (char)c)
+			return ((char *)&s[index]);
+		index++;
+	}
+	if (s[index] == (char)c)
+		return ((char *)&s[index]);
+	return (NULL);
+}

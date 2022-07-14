@@ -6,31 +6,30 @@
 /*   By: emetras- <emetras-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 14:24:15 by emetras-          #+#    #+#             */
-/*   Updated: 2022/07/03 02:54:28 by emetras-         ###   ########.fr       */
+/*   Updated: 2022/07/14 16:33:01 by emetras-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-char	*ft_strjoin(char *s1, char const *s2) //apaguei o const do s1
-{
-	size_t	size;
-	size_t	index;
-	char	*ptr;
+// char	*ft_strjoin(const char *s1, char const *s2)
+// {
+// 	size_t	size;
+// 	size_t	index;
+// 	char	*ptr;
 
-	index = 0;
-	size = ft_strlen(s1) + ft_strlen(s2);
-	ptr = (char *) ft_calloc(size +1, sizeof(char));
-	if (!ptr)
-		return (NULL);
-	while (*s1)
-		ptr[index++] = *s1++;
-	while (*s2)
-		ptr[index++] = *s2++;
-	ptr[index] = '\0';
-	//free (s1); // adicional para gnl, libero o espaço do s1.
-	return (ptr);
-}
+// 	index = 0;
+// 	size = ft_strlen(s1) + ft_strlen(s2);
+// 	ptr = (char *) malloc((size +1) * sizeof(char));
+// 	if (!ptr)
+// 		return (NULL);
+// 	while (*s1)
+// 		ptr[index++] = *s1++;
+// 	while (*s2)
+// 		ptr[index++] = *s2++;
+// 	ptr[index] = '\0';
+// 	return (ptr);
+// }
 
 size_t	ft_strlen(const char *s)
 {
@@ -42,49 +41,58 @@ size_t	ft_strlen(const char *s)
 	return (index);
 }
 
-void	*ft_calloc(size_t nmemb, size_t size)
+char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
-	void	*ptr;
-	size_t	max;
+	size_t	s_len;
+	char	*ptr;
 
-	max = nmemb * size;
-	if (nmemb <= 0 || size <= 0 || ((max / size) != nmemb))
+	s_len = ft_strlen(s);
+	if (start > s_len)
+	{
+		len = 1;
+		start = 0;
+	}
+	else if (len + start > s_len)
+		len = s_len - start + 1;
+	else
+		len = len + 1;
+	ptr = malloc(len * sizeof(char));
+	if (!ptr)
 		return (NULL);
-	ptr = malloc(max);
-	if (ptr == NULL)
-		return (NULL);
-	return (ft_memset(ptr, '\0', max));
+	ft_strlcpy(ptr, &s[start], len);
+	return (ptr);
 }
 
-void	*ft_memset(void *s, int c, size_t n)
+size_t	ft_strlcpy(char *dst, const char *src, size_t size)
 {
-	char	*str;
+	size_t	srclen;
 
-	str = (char *) s;
-	while (n > 0)
+	srclen = ft_strlen(src);
+	if (srclen + 1 < size)
 	{
-		str[n - 1] = (char) c;
-		n--;
+		ft_memcpy(dst, src, srclen + 1);
 	}
-	return (s);
+	else if (size != 0)
+	{
+		ft_memcpy(dst, src, size - 1);
+		dst[size -1] = '\0';
+	}
+	return (srclen);
 }
 
-char	*ft_strrchr(const char *s, int c)
+void	*ft_memcpy( void *dest, const void *src, size_t count )
 {
-	int	index;
-	int	last;
+	unsigned char	*source;
+	unsigned char	*des;
+	size_t			i;
 
-	last = -1;
-	index = 0;
-	while (s[index])
+	i = 0;
+	source = (unsigned char *) src;
+	des = (unsigned char *)dest;
+	while (i < count)
 	{
-		if (s[index] == (char)c)
-			last = index;
-		index++;
+		des[i] = source [i];
+		i++;
 	}
-	if (s[index] == (char)c)
-		last = index;
-	if (last >= 0)
-		return ((char *)&s[last]);
-	return (NULL);
+	return ((void *) des);
 }
