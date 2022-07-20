@@ -6,7 +6,7 @@
 /*   By: emetras- <emetras-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 14:24:08 by emetras-          #+#    #+#             */
-/*   Updated: 2022/07/14 16:35:13 by emetras-         ###   ########.fr       */
+/*   Updated: 2022/07/20 19:01:51 by emetras-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,72 +14,66 @@
 #include <stdio.h>
 
 static char	*ft_next(int fd, char **s_buffer, char *buffer);
-int			ft_strend(char *buffer);
+static char	*ft_get_line(char **s_buffer, char *bff);
 
 char	*get_next_line(int fd)
 {
-	char		*buff;
 	static char	*s_buff;
+	char		*buff;
 
 	if(fd > 1023 || fd < 0 || BUFFER_SIZE <= 0 )
 		return (NULL);
 	buff = (char *) malloc((BUFFER_SIZE + 1) * sizeof(char));
 	if (!buff)
 		return (NULL);
+	if (!s_buff)
+		s_buff = ft_strjoin("", ""); //inicializa a statica
 	buff = ft_next(fd, &s_buff, buff);
 	return (buff);
 }
 
 static char	*ft_next(int fd, char **s_buffer, char *buffer)
 {
-	int	sz_read;
-	int	i;
+	char	*tmp;
+	char	*line;
+	int		sz_read;
 
-	i = 0;
-	sz_read = 0;
-	if (!*s_buffer)
+	sz_read = 1;
+	while((!ft_strchr(*s_buffer, '\n')) && sz_read)
 	{
 		sz_read = read(fd, buffer, BUFFER_SIZE);
-		if (sz_read < 0)
-			return (NULL);
 		buffer[sz_read] = '\0';
-		if (ft_strchr((buffer), '\n'))
-		{
-			i = ft_strend(buffer);
-			*s_buffer = ft_substr(buffer, i + 1, BUFFER_SIZE);
-			return (ft_substr(buffer, 0, i + 1));
-		}
+		tmp = *s_buffer;
+		*s_buffer = ft_strjoin(tmp, buffer);
+		free (tmp);
 	}
-	if(*s_buffer) //se a estatica contem conteudo
+	if (!sz_read)
 	{
-		if (ft_strchr(*s_buffer, '\n'))
-		{
-			i = ft_strend(*s_buffer);
-			buffer = ft_substr(*s_buffer, 0, i + 1);
-			*s_buffer = ft_substr(*s_buffer, i + 1, BUFFER_SIZE);
-		}
-		else
-		{
-			i = ft_strend(*s_buffer);
-			buffer = ft_substr(*s_buffer, 0, i + 1);
-		}
+		free(buffer);
+		return(*s_buffer);
 	}
-	if (!buffer)
-		return (NULL);
-	return (buffer);
+	line = ft_get_line(s_buffer, buffer);
+	return (line);
 }
 
-int ft_strend(char *buffer)
+static char *ft_get_line(char **s_buffer, char *bff)
 {
-	int i;
+	int	i;
+	char *tmp;
 
 	i = 0;
-	while(buffer[i] != '\n' && buffer[i] != '\0')
+	while(*(*s_buffer + i) != '\n' && *(*s_buffer + i) != '\0')
 		i++;
-	return (i);
+	tmp = bff;
+	bff = ft_substr(*s_buffer, 0, i + 1);
+	free (tmp);
+	tmp = *s_buffer;
+	*s_buffer = ft_substr(*s_buffer, i + 1, ft_strlen(*s_buffer));  //buffer continua reachable apos EOF
+	free (tmp);
+	return (bff);
 }
 
-char	*ft_strchr(const char *s, int c)
+char	*ft_strchr(const char *s, int c) //preciso da static? 
 {
 	int	index;
 

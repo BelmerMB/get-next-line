@@ -6,30 +6,30 @@
 /*   By: emetras- <emetras-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 14:24:15 by emetras-          #+#    #+#             */
-/*   Updated: 2022/07/14 16:33:01 by emetras-         ###   ########.fr       */
+/*   Updated: 2022/07/18 05:44:16 by emetras-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-// char	*ft_strjoin(const char *s1, char const *s2)
-// {
-// 	size_t	size;
-// 	size_t	index;
-// 	char	*ptr;
+char	*ft_strjoin(const char *s1, char const *s2)
+{
+	size_t	size;
+	size_t	index;
+	char	*ptr;
 
-// 	index = 0;
-// 	size = ft_strlen(s1) + ft_strlen(s2);
-// 	ptr = (char *) malloc((size +1) * sizeof(char));
-// 	if (!ptr)
-// 		return (NULL);
-// 	while (*s1)
-// 		ptr[index++] = *s1++;
-// 	while (*s2)
-// 		ptr[index++] = *s2++;
-// 	ptr[index] = '\0';
-// 	return (ptr);
-// }
+	index = 0;
+	size = ft_strlen(s1) + ft_strlen(s2);
+	ptr = (char *) malloc((size +1) * sizeof(char));
+	if (!ptr)
+		return (NULL);
+	while (*s1)
+		ptr[index++] = *s1++;
+	while (*s2)
+		ptr[index++] = *s2++;
+	ptr[index] = '\0';
+	return (ptr);
+}
 
 size_t	ft_strlen(const char *s)
 {

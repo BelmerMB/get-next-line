@@ -6,7 +6,7 @@
 /*   By: emetras- <emetras-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 14:55:22 by emetras-          #+#    #+#             */
-/*   Updated: 2022/07/14 16:19:36 by emetras-         ###   ########.fr       */
+/*   Updated: 2022/07/20 18:58:54 by emetras-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,9 @@
 	 printf("%s", buf);
 	    free(buf);
 		
-	buf = get_next_line(fd);  
-	printf("%s", buf);
-	free(buf);
+	// buf = get_next_line(fd);  
+	// printf("%s", buf);
+	// free(buf);
 	
 	// buf = get_next_line(fd);  
 	// printf("%s", buf);
