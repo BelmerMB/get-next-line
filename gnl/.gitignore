@@ -1,3 +1,7 @@
 vgcore.*
 a.out
 42_with_nl
+get_next_line.h.gch
+.gitignore
+tester
+

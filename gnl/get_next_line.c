@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emetras- <emetras-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bot_elmer <bot_elmer@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 14:24:08 by emetras-          #+#    #+#             */
-/*   Updated: 2022/07/25 18:30:08 by emetras-         ###   ########.fr       */
+/*   Updated: 2022/07/27 13:46:26 by bot_elmer        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <stdio.h>
 
 static char	*ft_next(int fd, char **s_buffer, char *buffer);
 static char	*ft_get_line(char **s_buffer, char *bff, int fd);
@@ -27,7 +26,7 @@ char	*get_next_line(int fd)
 	if (!buff)
 		return (NULL);
 	if (!s_buff)
-		s_buff = ft_strjoin("", ""); //inicializa a statica
+		s_buff = ft_strjoin("", "");
 	buff = ft_next(fd, &s_buff, buff);
 	return (buff);
 }
@@ -42,15 +41,13 @@ static char	*ft_next(int fd, char **s_buffer, char *buffer)
 	while((!ft_strchr(*s_buffer, '\n')) && sz_read > 0)
 	{
 		sz_read = read(fd, buffer, BUFFER_SIZE);
-		buffer[sz_read] = '\0';
-		if(!sz_read)
+		if(sz_read <= 0)
 			break;
+		buffer[sz_read] = '\0';
 		tmp = *s_buffer;
 		*s_buffer = ft_strjoin(tmp, buffer);
 		free (tmp);
 	}
-	// if (sz_read == -1) //pode quebrar por vazamento
-	// 		return (NULL);
 	line = ft_get_line(s_buffer, buffer, sz_read);
 	return (line);
 }
@@ -63,7 +60,7 @@ static char *ft_get_line(char **s_buffer, char *bff, int read)
 	i = 0;
 	while(*(*s_buffer + i) != '\n' && *(*s_buffer + i) != '\0')
 		i++;
-	if (!read && !i) //se for 0 na leitura e 0 de tamanho return null
+	if ((read <= 0) && !i)
 	{
 		tmp = *s_buffer;
 		free (tmp);
@@ -75,12 +72,12 @@ static char *ft_get_line(char **s_buffer, char *bff, int read)
 	bff = ft_substr(*s_buffer, 0, i + 1);
 	free (tmp);
 	tmp = *s_buffer;
-	*s_buffer = ft_substr(*s_buffer, i + 1, ft_strlen(*s_buffer));  //buffer continua reachable apos EOF
+	*s_buffer = ft_substr(*s_buffer, i + 1, ft_strlen(*s_buffer));
 	free (tmp);
 	return (bff);
 }
 
-char	*ft_strchr(const char *s, int c) //preciso da static? 
+char	*ft_strchr(const char *s, int c)
 {
 	int	index;
 
