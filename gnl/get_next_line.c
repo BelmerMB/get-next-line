@@ -6,7 +6,7 @@
 /*   By: emetras- <emetras-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 14:24:08 by emetras-          #+#    #+#             */
-/*   Updated: 2022/07/20 19:01:51 by emetras-         ###   ########.fr       */
+/*   Updated: 2022/07/25 18:30:08 by emetras-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <stdio.h>
 
 static char	*ft_next(int fd, char **s_buffer, char *buffer);
-static char	*ft_get_line(char **s_buffer, char *bff);
+static char	*ft_get_line(char **s_buffer, char *bff, int fd);
 
 char	*get_next_line(int fd)
 {
@@ -39,24 +39,23 @@ static char	*ft_next(int fd, char **s_buffer, char *buffer)
 	int		sz_read;
 
 	sz_read = 1;
-	while((!ft_strchr(*s_buffer, '\n')) && sz_read)
+	while((!ft_strchr(*s_buffer, '\n')) && sz_read > 0)
 	{
 		sz_read = read(fd, buffer, BUFFER_SIZE);
 		buffer[sz_read] = '\0';
+		if(!sz_read)
+			break;
 		tmp = *s_buffer;
 		*s_buffer = ft_strjoin(tmp, buffer);
 		free (tmp);
 	}
-	if (!sz_read)
-	{
-		free(buffer);
-		return(*s_buffer);
-	}
-	line = ft_get_line(s_buffer, buffer);
+	// if (sz_read == -1) //pode quebrar por vazamento
+	// 		return (NULL);
+	line = ft_get_line(s_buffer, buffer, sz_read);
 	return (line);
 }
 
-static char *ft_get_line(char **s_buffer, char *bff)
+static char *ft_get_line(char **s_buffer, char *bff, int read)
 {
 	int	i;
 	char *tmp;
@@ -64,6 +63,14 @@ static char *ft_get_line(char **s_buffer, char *bff)
 	i = 0;
 	while(*(*s_buffer + i) != '\n' && *(*s_buffer + i) != '\0')
 		i++;
+	if (!read && !i) //se for 0 na leitura e 0 de tamanho return null
+	{
+		tmp = *s_buffer;
+		free (tmp);
+		*s_buffer = NULL;
+		free (bff);
+		return (NULL);
+	}
 	tmp = bff;
 	bff = ft_substr(*s_buffer, 0, i + 1);
 	free (tmp);

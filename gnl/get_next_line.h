@@ -6,7 +6,7 @@
 /*   By: emetras- <emetras-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 14:24:21 by emetras-          #+#    #+#             */
-/*   Updated: 2022/07/20 18:37:35 by emetras-         ###   ########.fr       */
+/*   Updated: 2022/07/25 17:50:10 by emetras-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # include <unistd.h>
 
 #ifndef BUFFER_SIZE
-# define BUFFER_SIZE 2
+# define BUFFER_SIZE 5
 #endif
 
 //verificar a questão das funções static!!!!!
