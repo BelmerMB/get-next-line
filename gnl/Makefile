@@ -1,7 +1,7 @@
 
-PARAMENTS	= -Wall -Wextra -Werror -g3 -I
+PARAMENTS	= -Wall -Wextra -Werror -g
 
-SIZE		= 1 #sera que consingo passar o valor pela linha de comando? google pesquisar!
+SIZE		= 1
 
 BUFFER		= -D BUFFER_SIZE=${SIZE}
 
@@ -20,5 +20,6 @@ run: all
 buff:
 	cc main.c -Wall -Wextra -Werror ${BUFFER} -g3 -I ${FILES}
 	@./a.out
+
 check: all
 	valgrind --leak-check=full --show-leak-kinds=all ./a.out
