@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bot_elmer <bot_elmer@student.42.fr>        +#+  +:+       +#+        */
+/*   By: emetras- <emetras-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 14:24:08 by emetras-          #+#    #+#             */
-/*   Updated: 2022/07/27 14:01:07 by bot_elmer        ###   ########.fr       */
+/*   Updated: 2022/07/28 17:27:37 by emetras-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,14 @@
 
 static char	*ft_next(int fd, char **s_buffer, char *buffer);
 static char	*ft_get_line(char **s_buffer, char *bff, int fd);
+static char	*ft_find_nl(const char *s, int c);
 
 char	*get_next_line(int fd)
 {
 	static char	*s_buff[MAX_FD];
 	char		*buff;
 
-	if(fd > 1024 || fd < 0 || BUFFER_SIZE <= 0 )
+	if (fd > 1024 || fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	buff = (char *) malloc((BUFFER_SIZE + 1) * sizeof(char));
 	if (!buff)
@@ -38,11 +39,11 @@ static char	*ft_next(int fd, char **s_buffer, char *buffer)
 	int		sz_read;
 
 	sz_read = 1;
-	while((!ft_strchr(*s_buffer, '\n')) && sz_read > 0)
+	while ((!ft_find_nl(*s_buffer, '\n')) && sz_read > 0)
 	{
 		sz_read = read(fd, buffer, BUFFER_SIZE);
-		if(sz_read <= 0)
-			break;
+		if (sz_read <= 0)
+			break ;
 		buffer[sz_read] = '\0';
 		tmp = *s_buffer;
 		*s_buffer = ft_strjoin(tmp, buffer);
@@ -52,13 +53,13 @@ static char	*ft_next(int fd, char **s_buffer, char *buffer)
 	return (line);
 }
 
-static char *ft_get_line(char **s_buffer, char *bff, int read)
+static char	*ft_get_line(char **s_buffer, char *bff, int read)
 {
-	int	i;
-	char *tmp;
+	int		i;
+	char	*tmp;
 
 	i = 0;
-	while(*(*s_buffer + i) != '\n' && *(*s_buffer + i) != '\0')
+	while (*(*s_buffer + i) != '\n' && *(*s_buffer + i) != '\0')
 		i++;
 	if ((read <= 0) && !i)
 	{
@@ -77,7 +78,7 @@ static char *ft_get_line(char **s_buffer, char *bff, int read)
 	return (bff);
 }
 
-char	*ft_strchr(const char *s, int c)
+static char	*ft_find_nl(const char *s, int c)
 {
 	int	index;
 
