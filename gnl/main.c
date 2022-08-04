@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emetras- <emetras-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bot_elmer <bot_elmer@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 14:55:22 by emetras-          #+#    #+#             */
-/*   Updated: 2022/07/28 17:56:30 by emetras-         ###   ########.fr       */
+/*   Updated: 2022/07/30 14:27:27 by bot_elmer        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,14 @@
 
 // single file test
     fd = open("42_with_nl", O_RDONLY);
-	buf = get_next_line(fd);  
+	buf = get_next_line(0);  
 	 printf("%s", buf);
 	    free(buf);
 		
-	buf = get_next_line(fd);  
-	printf("%s", buf);
-	free(buf);
-	
+	// buf = get_next_line(fd);  
+	// printf("%s", buf);
+	// free(buf);
+
 	// buf = get_next_line(fd);  
 	// printf("%s", buf);
 	// free(buf);

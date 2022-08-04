@@ -7,8 +7,8 @@ BUFFER		= -D BUFFER_SIZE=${SIZE}
 
 FILES		= get_next_line.h get_next_line.c get_next_line_utils.c
 
-all:
-	cc main.c ${PARAMENTS} ${FILES}
+m:
+	cc main.c ${PARAMENTS} main.c -iquote ./Mandatory/${FILES}
 
 clean:
 	rm a.out
